@@ -12,6 +12,8 @@
 
 cmake_minimum_required(VERSION 2.8.12)
 project(ad9361 C)
+#make sure our local CMake Modules path comes first
+list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_SOURCE_DIR}/cmake/Modules)
 
 set(LIBAD9361_VERSION_MAJOR 0)
 set(LIBAD9361_VERSION_MINOR 2)
@@ -82,6 +84,12 @@ find_path(LIBIIO_INCLUDEDIR iio.h)
 
 set(LIBAD9361_HEADERS ad9361.h)
 
+find_package(Gpiod)
+
+if(NOT GPIOD_FOUND)
+    message(FATAL_ERROR "gpiod required to compile")
+endif()
+
 file(GLOB_RECURSE FD_SRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/filterdesigner/*.c)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${LIBIIO_INCLUDEDIR})
 add_library(ad9361 ad9361_multichip_sync.c
@@ -102,7 +110,7 @@ set_target_properties(ad9361 PROPERTIES
 	C_STANDARD_REQUIRED ON
 	C_EXTENSIONS OFF
 )
-target_link_libraries(ad9361 LINK_PRIVATE ${LIBIIO_LIBRARIES})
+target_link_libraries(ad9361 LINK_PRIVATE ${LIBIIO_LIBRARIES} ${GPIOD_LIBRARIES})
 
 if (MSVC)
 	set_target_properties(ad9361 PROPERTIES OUTPUT_NAME libad9361)
