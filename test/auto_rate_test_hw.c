@@ -8,7 +8,11 @@
 #include <string.h>
 #include <errno.h>
 
+#ifdef __APPLE__
 #include <iio/iio.h>
+#else
+#include <iio.h>
+#endif
 
 #define RATE_TOLERANCE_HZ 2
 
@@ -51,7 +55,7 @@ int main(void)
     const char* uri = getenv("URI_AD9361");
     if (uri == NULL)
         exit(0);// Cant find anything don't run tests
-    ctx = iio_create_context(NULL, uri);
+    ctx = iio_create_context_from_uri(uri);
     if (ctx == NULL) {
         printf("No device found... skipping test");
         exit(0);// Cant find anything don't run tests
