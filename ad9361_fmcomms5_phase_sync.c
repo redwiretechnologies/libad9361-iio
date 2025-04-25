@@ -55,7 +55,7 @@
 #define CALIBRATE_TX 0
 #define PAUSE 0
 
-#define GPIOCHIP "1"
+#define GPIOCHIP "2"
 #define CONSUMER "PHASE_SYNC"
 #define CALIBRATION_LINE 4
 #define TX_LINE 6
